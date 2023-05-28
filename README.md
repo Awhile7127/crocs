@@ -49,3 +49,5 @@ Choice orange = initialize_obj("orange", vector<string>{"paper"});
 
 vector<Choice> choices = {rock, paper, scissors, orange};
 ```
+
+**I have plans to make this easier to do in the future.**
