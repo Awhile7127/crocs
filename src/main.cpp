@@ -20,6 +20,12 @@ Choice initialize_obj(string name, vector<string> beats) {
 
 // GET PLAYER INPUT
 string get_input(vector<Choice> choices) {
+    cout << "Choose a move! Choices are:\n";
+
+    for (int i = 0; i < choices.size(); i++) {
+        cout << "> " << choices[i].name << "\n";
+    }
+
     string inp;
     cin >> inp;
 
