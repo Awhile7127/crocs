@@ -1,11 +1,31 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <json/json.h>
+#include <fstream>
 
 #include "classes.h"
 
 
 using namespace std;
+
+
+// READ CONFIG FILE AND RETURN POSSIBLE CHOICES
+Json::Value read_config_file() {
+
+    // CHECK WHETHER THE CONFIG FILE EXISTS
+    std::ifstream file("config.json", std::ifstream::binary);
+
+    if (!file.is_open()) {
+        cout << "No config.json file found\n";
+        exit(1);
+    }
+
+    Json::Value root;
+    file >> root;
+    return root;
+}
+
 
 
 // CREATE "CHOICE" CLASSES
@@ -70,13 +90,35 @@ bool play_move(vector<Choice> choices, string player_move) {
 
 int main() {
 
-    // INITIALIZE INDIVIDUAL MOVE CHOICES
-    Choice rock = initialize_obj("rock", vector<string>{"scissors"});
-    Choice paper = initialize_obj("paper", vector<string>{"rock"});
-    Choice scissors = initialize_obj("scissors", vector<string>{"paper"});
+    // READ THE MOVES PLAYERS CAN MAKE
+    Json::Value config = read_config_file();
 
-    // CREATE A VECTOR OF CHOICES TO ITERATE THROUGH LATER
-    vector<Choice> choices = {rock, paper, scissors};
+    // DECLARE A VECTOR FOR LATER USE
+    // THIS IS THE VECTOR OF PLAYER MOVES
+    vector<Choice> choices;
+
+    // ITERATE OVER EACH JSON ARRAY ENTRY
+    for (Json::Value::const_iterator itr = config.begin(); itr != config.end(); itr++) {
+
+        // EXPLICITLY CONVERT FROM JSON::VALUE TO STRING
+        string name = itr.key().asString();
+
+        // INITALIZE A VECTOR OF OTHER MOVES THE CURRENTLY ITERATED ONE BEATS
+        vector<string> beats;
+
+        // ITERATE THROUGH ALL ELEMENTS IN THE CURRENTLY ITERATED ARRAY ENTRY
+        for (int i = 0; i < config[name].size(); i++) {
+
+            // EXPLICITLY CONVERT DATA TYPE FROM JSON::VALUE TO STRING
+            // AND APPEND TO PREVIOUSLY DECLARED VECTOR
+            string val = config[name][i].asString();
+            beats.push_back(val);
+        }
+
+        // INITAILIZE OBJECT WITH CLASS STRUCTURE AND PUSH TO VECTOR OF CHOICES
+        choices.push_back(initialize_obj(name, beats));
+    }
+
 
     // GET PLAYER MOVE
     string player_move;

@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-I.
+CFLAGS=-I. -ljsoncpp
 FILES=src/*.cpp
 OUTPUT=crocs
 

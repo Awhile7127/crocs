@@ -26,28 +26,27 @@ choice's name. For instance: `rock`, `paper`, `scissors` or `orange`.
 
 ### Adding custom moves
 
-Easily added by editing the `main.cpp` file:
+**Good news! I made this easier.**
 
-Simply edit this section of code, following the same format:
+Simply edit the `config.json` file where the program is located upon
+execution and add custom entries.
 
-```
-Choice rock = initialize_obj("rock", vector<string>{"scissors"});
-Choice paper = initialize_obj("paper", vector<string>{"rock"});
-Choice scissors = initialize_obj("scissors", vector<string>{"paper"});
-
-vector<Choice> choices = {rock, paper, scissors};
-```
-
-For instance, if I wanted to add `orange` as a move, where `orange` beats
-paper, but is beaten by scissors and rock, I would edit the above to be:
+Entries take the form of:
 
 ```
-Choice rock = initialize_obj("rock", vector<string>{"scissors", "orange"});
-Choice paper = initialize_obj("paper", vector<string>{"rock"});
-Choice scissors = initialize_obj("scissors", vector<string>{"paper", "orange"});
-Choice orange = initialize_obj("orange", vector<string>{"paper"});
-
-vector<Choice> choices = {rock, paper, scissors, orange};
+name: [ "beats", "beats" ]
 ```
 
-**I have plans to make this easier to do in the future.**
+... where `name` is the name of the move (e.g. rock, paper, scissors)
+and each `beats` is the name of another move that this move beats.
+For instance: `rock` beats `scissors`, so a typical `config.json` would
+look like this:
+
+
+```
+{
+    "rock" = [ "scissors" ],
+    "paper" = [ "rock" ],
+    "scissors" = [ "paper" ]
+}
+```
