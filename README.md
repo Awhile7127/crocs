@@ -17,7 +17,7 @@ Simply run `make`.
 ## Usage
 
 ```
-./crocs
+./crocs --config path_to_config
 ```
 
 The program will then wait for your input, which must match any given

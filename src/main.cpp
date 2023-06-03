@@ -1,9 +1,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include <json/json.h>
 #include <fstream>
 
+#include "cparse.h"
 #include "classes.h"
 
 
@@ -11,10 +13,10 @@ using namespace std;
 
 
 // READ CONFIG FILE AND RETURN POSSIBLE CHOICES
-Json::Value read_config_file() {
+Json::Value read_config_file(string config) {
 
     // CHECK WHETHER THE CONFIG FILE EXISTS
-    std::ifstream file("config.json", std::ifstream::binary);
+    std::ifstream file(config, std::ifstream::binary);
 
     if (!file.is_open()) {
         cout << "No config.json file found\n";
@@ -88,10 +90,17 @@ bool play_move(vector<Choice> choices, string player_move) {
 }
 
 
-int main() {
+int main(int argc, char **argv) {
+
+    // FIND CONFIG FILE
+    array2d_t arguments = {
+        build_argument("config", "c", "")
+    };
+
+    map<string, string> returned = parse_arguments(arguments, argc, argv);
 
     // READ THE MOVES PLAYERS CAN MAKE
-    Json::Value config = read_config_file();
+    Json::Value config = read_config_file(returned["config"]);
 
     // DECLARE A VECTOR FOR LATER USE
     // THIS IS THE VECTOR OF PLAYER MOVES
